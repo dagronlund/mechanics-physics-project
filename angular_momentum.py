@@ -92,3 +92,5 @@ while True:
     # print(l.mag)
 
     rate(180)
+# GEORGE WAS HERE
+    
