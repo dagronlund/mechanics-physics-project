@@ -3,6 +3,10 @@ from visual import vector, norm, mag, cross
 import numpy as np
 import numpy.linalg as npl
 
+ux = vector(1, 0, 0)
+uy = vector(0, 1, 0)
+uz = vector(0, 0, 1)
+
 def rotation_matrix(omega):
     theta = mag(omega)
     if theta == 0:
