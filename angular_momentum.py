@@ -118,3 +118,4 @@ while True:
     # print("L: ", mtov(np.dot(sys, mtov(np.dot(inertia_tensor(axes), omega)))).mag)
     # torque = cone_torque(-sys[:,1], m * vector(0, -9.8, 0), top.height)
     # torque = vector()
+
