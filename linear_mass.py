@@ -19,7 +19,7 @@ def remove_normal(v, n):
     return v - v.proj(n)
 
 m1 = sphere(radius = .25, mass = 10, make_trail = True, 
-    momentum = vector(0, 0, -8.4 * 10),
+    momentum = vector(0, 0, -8.4 * 10 * 0),
     pos = vector(sin(pi / 3.0), -cos(pi / 3.0)) * dist)
 arm = cylinder(pos = vector(), radius = .1)
 

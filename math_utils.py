@@ -1,12 +1,13 @@
 from math import *
-from visual import vector, norm, mag
+from visual import vector, norm, mag, cross
 import numpy as np
 import numpy.linalg as npl
 
-def rotation_matrix(axis, theta):
-    if mag(axis) == 0:
+def rotation_matrix(omega):
+    theta = mag(omega)
+    if theta == 0:
         return np.matrix(np.identity(3))
-    axis = axis.norm()
+    axis = norm(omega)
     a = cos(theta / 2)
     b, c, d = -axis * sin(theta / 2)
     aa, bb, cc, dd = a * a, b * b, c * c, d * d
@@ -14,6 +15,19 @@ def rotation_matrix(axis, theta):
     return np.matrix([[aa+bb-cc-dd, 2*(bc+ad), 2*(bd-ac)],
                       [2*(bc-ad), aa+cc-bb-dd, 2*(cd+ab)],
                       [2*(bd+ac), 2*(cd-ab), aa+dd-bb-cc]])
+
+def rotate(self, omega):
+    return np.dot(rotation_matrix(omega), self)
+
+def mtov(self):
+    return vector(tuple(np.array(self).reshape(-1,).tolist()))
+
+def vtom(self):
+    return np.matrix([[self.x], [self.y], [self.z]])
+
+np.matrix.rotate = rotate
+np.matrix.vec = mtov
+vector.mat = vtom
 
 def box_principal_axes(mass, width, height, depth):
     return (mass * (pow(height, 2.0) + pow(depth, 2.0)) / 12,
@@ -32,6 +46,17 @@ def cone_principal_axes(mass, radius, height):
     z = pow(radius, 2) + 4 * pow(height, 2)
     return (3.0 / 20 * mass * x, 3.0 / 20 * mass * y, 3.0 / 20 * mass * z)
 
+# Cylinder axis is along y-axis
+def cylinder_principal_axes(mass, radius, height):
+    r2 = pow(radius, 2.0)
+    h2 = pow(height, 2.0)
+    return (mass * (3 * r2 + h2) / 12,
+            mass * r2 / 2.0,
+            mass * (3 * r2 + h2) / 12)
+
+# def cone_torque(r, fg, height):
+#     return cross(norm(r), fg) * (3.0 / 4.0) * height 
+
 def delta_omega(principal_axes, omega, torque):
     i1, i2, i3 = principal_axes
     return vector(((i2 - i3) * omega.y * omega.z + torque.x) / i1,
@@ -43,6 +68,3 @@ def inertia_tensor(axes):
         [axes[0], 0, 0],
         [0, axes[1], 0],
         [0, 0, axes[2]]])
-
-def mtov(matrix):
-    return vector(tuple(np.array(matrix).reshape(-1,).tolist()))
