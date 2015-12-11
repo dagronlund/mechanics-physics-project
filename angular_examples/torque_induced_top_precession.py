@@ -25,7 +25,7 @@ display(width = 800, height = 600)
 theta = pi / 12.0
 dt = 0.002
 sys = np.matrix(np.identity(3))
-omega_p = uy * 12
+omega_p = uy * 20
 
 sys = sys.rotate(theta * -uz)
 omega_p = omega_p.rotate(theta, -uz)
@@ -38,7 +38,7 @@ axes = cylinder_principal_axes(top.mass, 2.5, 5)
 
 # Optional code to provide initial angular velocity to cancel out nutations
 omega_precession = top.mass * 9.8 * (top_axis.height / 2) / (axes[1] * mag(omega_p)) * uy
-omega_p += omega_precession
+# omega_p += omega_precession
 
 arrow_offset = vector(-12, 0, 0)
 omega_axis = arrow(pos = arrow_offset + uy * 4, shaftwidth = 0, 
@@ -76,8 +76,8 @@ while True:
     orient_top(top, top_axis, top_direction, top_trail, sys)
 
     # Update diagnostics
-    omega_axis.axis = norm(omega_p) * 3
-    l_axis.axis = norm(l) * 3
+    omega_axis.axis = omega_p / 4.0
+    l_axis.axis = l / 60.0
     torque_axis.axis = torque_p / 20.0
 
     rate(200)
